@@ -1,5 +1,3 @@
-package Client;
-
 import java.util.*;
 import java.awt.*;
 
