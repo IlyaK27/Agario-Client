@@ -137,7 +137,6 @@ public class Client {
                     update = input.readLine();
                 } catch (Exception e) {}
                 if(update != "" || update != null){
-                    System.out.println(update);
                     updateInfo = update.split(" ", 8);
                     if(updateInfo[0].equals(Const.MOVE)){
                         myBall.setX(Integer.parseInt(updateInfo[0]));
