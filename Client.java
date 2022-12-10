@@ -21,7 +21,7 @@ public class Client {
     private Socket clientSocket;
     private final String HOST = "localhost";
     private final int PORT = 5001;
-    protected boolean playing;
+    protected static boolean playing;
 
     private JLabel titleLabel;
     private JLabel nameLabel;
@@ -36,8 +36,14 @@ public class Client {
         Client client = new Client();
         client.setup();
         server.start();
-        while(true){          
-            window.repaint();
+        while(true){  
+            System.out.println("");
+            try {
+                Thread.sleep(20);
+            } catch (Exception e) {}
+            if (playing){
+                window.repaint();
+            }   
         }
     }
     //-------------------------------------------------
@@ -105,7 +111,10 @@ public class Client {
         gamePanel.remove(playButton); 
     }
     private int calculateAngle(){
-        int angle = (int)(Math.atan((mouseX - Const.WIDTH/2) / (mouseY - Const.HEIGHT/2)) * (Math.PI / 180));
+        int angle = (int)(Math.atan((double)(mouseX - Const.WIDTH/2) / (double)(mouseY - Const.HEIGHT/2)) * (180 / Math.PI));
+        if (mouseX < Const.WIDTH/2){
+            angle = 180 - angle;
+        }
         return angle;
     }
 
@@ -132,43 +141,71 @@ public class Client {
         public void run(){
             while(true){
                 String update = "";
-                String[] updateInfo = new String[6];
+                String[] updateInfo = new String[8];
                 try {
                     update = input.readLine();
                 } catch (Exception e) {}
                 if(update != "" || update != null){
+                    System.out.println(update);
                     updateInfo = update.split(" ", 8);
                     if(updateInfo[0].equals(Const.MOVE)){
-                        myBall.setX(Integer.parseInt(updateInfo[0]));
-                        myBall.setY(Integer.parseInt(updateInfo[1]));
-                        myBall.setRadius(Integer.parseInt(updateInfo[2]));
+                        myBall.setX(Integer.parseInt(updateInfo[1]));
+                        myBall.setY(Integer.parseInt(updateInfo[2]));
+                        myBall.setRadius(Integer.parseInt(updateInfo[3]));
                         int angle = calculateAngle();
                         output.println(Const.TURN + " " + angle);
-                        window.repaint();
+                        output.flush();
+                        System.out.println("move" + entities.size());
                     }
                     else if(updateInfo[0].equals(Const.DIE)){
+                        System.out.println("die");
                         playing = false;
                         addGUI();
                     }
                     else if(updateInfo[0].equals(Const.JOIN)){
-                        myBall = new Ball(name, Integer.parseInt(updateInfo[2]), color);
+                        int id = Integer.parseInt(updateInfo[1]);
+                        int x = Integer.parseInt(updateInfo[2]);
+                        int y = Integer.parseInt(updateInfo[3]);
+                        int radius = Integer.parseInt(updateInfo[4]);
+                        myBall = new Ball(name, x, y, radius, color);
+                        System.out.println(x + " " + y + " " + radius + " joined");
+                        entities.put(id, myBall);
                         playing = true;
                     }
                     else if(updateInfo[0].equals(Const.NEW)){
-                        entities.put(Integer.parseInt(updateInfo[1]), new Ball(updateInfo[5], 0, new Color(Integer.parseInt(updateInfo[2]), Integer.parseInt(updateInfo[3]), Integer.parseInt(updateInfo[4]))));
+                        int id = Integer.parseInt(updateInfo[1]);
+                        int red = Integer.parseInt(updateInfo[2]);
+                        int green = Integer.parseInt(updateInfo[3]);
+                        int blue = Integer.parseInt(updateInfo[4]);
+                        String name = updateInfo[5];
+                        entities.put(id, new Ball(name, 0, new Color(red, green, blue)));
+                        System.out.println("new");
                     }
                     else if(updateInfo[0].equals(Const.PELLET)){
-                        entities.put(Integer.parseInt(updateInfo[1]), new Circle(Integer.parseInt(updateInfo[2]), 
-                        Integer.parseInt(updateInfo[3]), Integer.parseInt(updateInfo[4]), 
-                        new Color(Integer.parseInt(updateInfo[5]), Integer.parseInt(updateInfo[6]), Integer.parseInt(updateInfo[7]))));
+                        int id = Integer.parseInt(updateInfo[1]);
+                        int x = Integer.parseInt(updateInfo[2]);
+                        int y = Integer.parseInt(updateInfo[3]);
+                        int radius = Integer.parseInt(updateInfo[4]);
+                        int red = Integer.parseInt(updateInfo[5]);
+                        int green = Integer.parseInt(updateInfo[6]);
+                        int blue = Integer.parseInt(updateInfo[7]);
+                        entities.put(id, new Circle(x, y, radius, new Color(red, green, blue)));
+                        //System.out.println("pellet");
                     }
                     else if(updateInfo[0].equals(Const.BALL)){
-                        entities.get(Integer.parseInt(updateInfo[1])).setX(Integer.parseInt(updateInfo[2]));
-                        entities.get(Integer.parseInt(updateInfo[1])).setY(Integer.parseInt(updateInfo[3]));
-                        entities.get(Integer.parseInt(updateInfo[1])).setRadius(Integer.parseInt(updateInfo[4]));
+                        int id = Integer.parseInt(updateInfo[1]);
+                        int x = Integer.parseInt(updateInfo[1]);
+                        int y = Integer.parseInt(updateInfo[1]);
+                        int radius = Integer.parseInt(updateInfo[1]);
+                        entities.get(id).setX(x);
+                        entities.get(id).setY(y);
+                        entities.get(id).setRadius(radius);
+                        //System.out.println("ball");
                     }
                     else if(updateInfo[0].equals(Const.REMOVE)){
-                        entities.remove(Integer.parseInt(updateInfo[1]));
+                        int id = Integer.parseInt(updateInfo[1]);
+                        entities.remove(id);
+                        System.out.println("remove");
                     }
                 }
             }
