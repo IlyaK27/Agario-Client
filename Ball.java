@@ -1,7 +1,7 @@
 import java.awt.*; 
 
 public class Ball extends Circle{
-    public String name;
+    private String name;
     // todo: implement ball growth
     
     public Ball(String name, int radius, Color color){
@@ -18,6 +18,11 @@ public class Ball extends Circle{
         super.draw(g, otherCircle, drawX, drawY);
         g.setColor(Const.FONT_COLOR);
         g.setFont(Const.BALL_FONT);
-        g.drawString(name, drawX, drawY);
+        int stringWidth = (int)g.getFontMetrics().getStringBounds(this.name, g).getWidth();
+        int stringHeight = (int)g.getFontMetrics().getStringBounds(this.name, g).getHeight();
+        g.drawString(this.name, drawX + radius - stringWidth/2, drawY + stringHeight / 3 + radius);
+    }
+    public String name(){
+        return this.name;
     }
 }
