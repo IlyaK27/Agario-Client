@@ -16,7 +16,7 @@ public class Client {
 
     private PrintWriter output;    
     private BufferedReader input;
-    private ServerHandler server;
+    private static ServerHandler server;
 
     private Socket clientSocket;
     private final String HOST = "localhost";
@@ -35,7 +35,7 @@ public class Client {
     public static void main(String[] args) throws IOException{
         Client client = new Client();
         client.setup();
-
+        server.start();
         while(true){          
             window.repaint();
         }
@@ -63,7 +63,6 @@ public class Client {
         window = new JFrame("Agar.io");
         window.setPreferredSize(new Dimension(Const.WIDTH, Const.HEIGHT));// adding because of window problems   
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setVisible(true);
         window.setResizable(false);
         window.setSize(Const.WIDTH, Const.HEIGHT);
         window.addMouseMotionListener(new MyMouseMotionListener());
@@ -85,13 +84,7 @@ public class Client {
         server = new ServerHandler(this);
         playing = false;
         addGUI();
-    }
-
-    public void run() throws Exception{
-        server.start();
-        while(playing){
-            window.repaint();
-        }
+        window.setVisible(true);
     }
     public void stop() throws Exception{ 
         input.close();
@@ -99,7 +92,7 @@ public class Client {
         clientSocket.close();
     }
     private void addGUI(){
-        nameField.setText(name);
+        nameField.setText(name);      
         gamePanel.add(titleLabel);
         gamePanel.add(nameLabel);
         gamePanel.add(nameField);
@@ -144,7 +137,7 @@ public class Client {
                     update = input.readLine();
                 } catch (Exception e) {}
                 if(update != "" || update != null){
-                    System.out.println(update);
+                    System.out.println("update - " + update);
                     updateInfo = update.split(" ", 8);
                     if(updateInfo[0].equals(Const.MOVE)){
                         myBall.setX(Integer.parseInt(updateInfo[0]));
