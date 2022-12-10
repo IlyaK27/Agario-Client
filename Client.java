@@ -111,11 +111,12 @@ public class Client {
         gamePanel.remove(playButton); 
     }
     private int calculateAngle(){
-        int angle = (int)(Math.atan((double)(mouseX - Const.WIDTH/2) / (double)(mouseY - Const.HEIGHT/2)) * (180 / Math.PI));
-        if (mouseX < Const.WIDTH/2){
-            angle = 180 - angle;
-        }
-        return angle;
+        int angle = (int)(Math.atan( (double)(mouseY - (double)Const.HEIGHT/2) / (mouseX - (double)Const.WIDTH/2)) * (180 / Math.PI));
+        int raa = Math.abs(angle);
+        if (mouseX >= (double)Const.WIDTH/2 && mouseY >= (double)Const.HEIGHT/2) return raa;
+        else if (mouseX < (double)Const.WIDTH/2 && mouseY >= (double)Const.HEIGHT/2) return 180 - raa;
+        else if (mouseX < (double)(Const.WIDTH)/2 && mouseY < (double)Const.HEIGHT/2) return 180 + raa;
+        else return 360 - raa;
     }
 
     private boolean withinFOV(Circle entity){
