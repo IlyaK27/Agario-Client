@@ -1,4 +1,3 @@
-import java.util.*;
 import java.awt.*; 
 
 public class Ball extends Circle{
@@ -20,8 +19,5 @@ public class Ball extends Circle{
         g.setColor(Const.FONT_COLOR);
         g.setFont(Const.BALL_FONT);
         g.drawString(name, drawX, drawY);
-    }
-    private int diameter() {
-        return this.radius * 2;
     }
 }

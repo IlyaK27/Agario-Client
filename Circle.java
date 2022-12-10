@@ -1,4 +1,3 @@
-import java.util.*;
 import java.awt.*;
 
 public class Circle {
@@ -40,14 +39,17 @@ public class Circle {
     public Color getColor() {
         return this.color;
     }
+    private int diameter() {
+        return this.radius * 2;
+    }
     public void draw(Graphics g, Circle otherCircle){
         int drawX = (x - otherCircle.getX() - radius) + Const.WIDTH/2;
         int drawY = (y - otherCircle.getY() - radius) + Const.HEIGHT/2;
         g.setColor(color);
-        g.fillOval(drawX, drawY, radius * 2, radius * 2);
+        g.fillOval(drawX, drawY, diameter(), diameter());
     }
     public void draw(Graphics g, Circle otherCircle, int drawX, int drawY){
         g.setColor(color);
-        g.fillOval(drawX, drawY, radius * 2, radius * 2);
+        g.fillOval(drawX, drawY, diameter(), diameter());
     }
 }
