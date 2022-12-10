@@ -19,8 +19,8 @@ public class Client {
     private ServerHandler server;
 
     private Socket clientSocket;
-    private final String HOST = "192.168.0.104";
-    private final int PORT = 5000;
+    private final String HOST = "localhost";
+    private final int PORT = 5001;
     protected boolean playing;
 
     private JLabel titleLabel;
@@ -132,6 +132,7 @@ public class Client {
         ServerHandler(Client client){
             this.client = client;
             this.pinger = new Pinger(this.client.output);
+            this.pinger.start();
         }
 
         @Override 
@@ -143,6 +144,7 @@ public class Client {
                     update = input.readLine();
                 } catch (Exception e) {}
                 if(update != "" || update != null){
+                    System.out.println(update);
                     updateInfo = update.split(" ", 8);
                     if(updateInfo[0].equals(Const.MOVE)){
                         myBall.setX(Integer.parseInt(updateInfo[0]));
