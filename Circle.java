@@ -1,7 +1,7 @@
 import java.util.*;
 import java.awt.*;
 
-public abstract class Circle {
+public class Circle {
     protected int x;
     protected int y;
     protected int radius;
@@ -40,5 +40,8 @@ public abstract class Circle {
     public Color getColor() {
         return this.color;
     }
-    public abstract void draw(Graphics g);
+    public void draw(Graphics g, Circle otherCircle){
+        g.setColor(color);
+        g.fillOval((x - otherCircle.getX() - radius) + Const.WIDTH/2, (y - otherCircle.getY() - radius) + Const.HEIGHT/2, radius * 2, radius * 2);
+    }
 }
