@@ -137,7 +137,6 @@ public class Client {
                     update = input.readLine();
                 } catch (Exception e) {}
                 if(update != "" || update != null){
-                    System.out.println("update - " + update);
                     updateInfo = update.split(" ", 8);
                     if(updateInfo[0].equals(Const.MOVE)){
                         myBall.setX(Integer.parseInt(updateInfo[0]));
@@ -182,7 +181,8 @@ public class Client {
             @Override 
             public void run(){
                 while(true){
-                    output.write(Const.PING);
+                    output.println(Const.PING);
+                    output.flush();
                     try {
                         Thread.sleep(20000);
                     } catch (Exception e){}
@@ -196,6 +196,7 @@ public class Client {
             name = nameField.getText();
             color = new Color((int)(Math.random() * 255), (int)(Math.random() * 255), (int)(Math.random() * 255));
             output.println(Const.JOIN + " " + color.getRed() + " " + color.getGreen() + " " + color.getBlue() + " " + name); 
+            output.flush();
             removeGUI();
         }
     }
